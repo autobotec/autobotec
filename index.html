@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autobotec - Servicios Tecnológicos Innovadores</title>
+  <meta name="description" content="Autobotec ofrece servicios tecnológicos innovadores: agentes de IA, desarrollo web y móvil, y estrategias de marketing digital.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0066FF;
+      --primary-dark: #0052CC;
+      --text-dark: #1a1a1a;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --white: #ffffff;
+      --spacing: 8px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .header.scrolled {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: calc(var(--spacing) * 5);
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      font-size: 15px;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .cta-button {
+      background: var(--primary);
+      color: var(--white);
+      padding: calc(var(--spacing) * 1.5) calc(var(--spacing) * 3);
+      border-radius: calc(var(--spacing) * 1);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid var(--primary);
+      font-size: 15px;
+    }
+
+    .cta-button:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: calc(var(--spacing) * 1);
+    }
+
+    .mobile-menu-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--text-dark);
+      transition: all 0.3s ease;
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      object-fit: cover;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.85), rgba(0, 82, 204, 0.75));
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: var(--white);
+      max-width: 900px;
+      padding: 0 calc(var(--spacing) * 3);
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-title {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: calc(var(--spacing) * 3);
+      letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+      font-size: 22px;
+      line-height: 1.5;
+      margin-bottom: calc(var(--spacing) * 5);
+      opacity: 0.95;
+      font-weight: 400;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: calc(var(--spacing) * 2);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .button-primary {
+      background: var(--white);
+      color: var(--primary);
+      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+      border-radius: calc(var(--spacing) * 1);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid var(--white);
+      font-size: 16px;
+    }
+
+    .button-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-secondary {
+      background: transparent;
+      color: var(--white);
+      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+      border-radius: calc(var(--spacing) * 1);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid var(--white);
+      font-size: 16px;
+    }
+
+    .button-secondary:hover {
+      background: var(--white);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .section {
+      padding: calc(var(--spacing) * 12) calc(var(--spacing) * 3);
+    }
+
+    .section-light {
+      background: var(--bg-light);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: calc(var(--spacing) * 8);
+    }
+
+    .section-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: calc(var(--spacing) * 2);
+      letter-spacing: -0.5px;
+    }
+
+    .section-description {
+      font-size: 20px;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: calc(var(--spacing) * 4);
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: calc(var(--spacing) * 5);
+      border-radius: calc(var(--spacing) * 2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto calc(var(--spacing) * 3);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: calc(var(--spacing) * 2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .service-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .service-description {
+      color: var(--text-light);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: calc(var(--spacing) * 5);
+      margin-top: calc(var(--spacing) * 6);
+    }
+
+    .benefit-item {
+      text-align: center;
+    }
+
+    .benefit-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .benefit-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 1);
+    }
+
+    .benefit-description {
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: calc(var(--spacing) * 4);
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      padding: calc(var(--spacing) * 5);
+      border-radius: calc(var(--spacing) * 2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .testimonial-text {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: calc(var(--spacing) * 3);
+      color: var(--text-dark);
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+    }
+
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .author-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .contact-section {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+    }
+
+    .contact-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contact-form {
+      background: var(--white);
+      padding: calc(var(--spacing) * 6);
+      border-radius: calc(var(--spacing) * 2);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-group {
+      margin-bottom: calc(var(--spacing) * 3);
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 1);
+      color: var(--text-dark);
+      font-size: 15px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: calc(var(--spacing) * 2);
+      border: 2px solid #e5e7eb;
+      border-radius: calc(var(--spacing) * 1);
+      font-family: inherit;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-button {
+      width: 100%;
+      background: var(--primary);
+      color: var(--white);
+      padding: calc(var(--spacing) * 2);
+      border: none;
+      border-radius: calc(var(--spacing) * 1);
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .form-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+    }
+
+    .form-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-message {
+      padding: calc(var(--spacing) * 2);
+      border-radius: calc(var(--spacing) * 1);
+      margin-bottom: calc(var(--spacing) * 3);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .form-message.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .form-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .footer {
+      background: var(--text-dark);
+      color: var(--white);
+      padding: calc(var(--spacing) * 8) calc(var(--spacing) * 3) calc(var(--spacing) * 4);
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: calc(var(--spacing) * 6);
+      margin-bottom: calc(var(--spacing) * 6);
+    }
+
+    .footer-section h3 {
+      font-size: 18px;
+      margin-bottom: calc(var(--spacing) * 3);
+      font-weight: 600;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .footer-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-size: 15px;
+    }
+
+    .footer-link:hover {
+      color: var(--white);
+    }
+
+    .social-links {
+      display: flex;
+      gap: calc(var(--spacing) * 2);
+      margin-top: calc(var(--spacing) * 2);
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 18px;
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: calc(var(--spacing) * 4);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .mobile-menu-toggle {
+        display: flex;
+      }
+
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+      }
+
+      .section-title {
+        font-size: 36px;
+      }
+
+      .section-description {
+        font-size: 18px;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .services-grid,
+      .benefits-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-form {
+        padding: calc(var(--spacing) * 4);
+      }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: calc(var(--spacing) * 4);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      40% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+      60% {
+        transform: translateX(-50%) translateY(-5px);
+      }
+    }
+
+    .scroll-indicator svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--white);
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav-container">
+      <a href="#" class="logo">Autobotec</a>
+      <ul class="nav-menu">
+        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+        <li><a href="#beneficios" class="nav-link">Beneficios</a></li>
+        <li><a href="#testimonios" class="nav-link">Testimonios</a></li>
+        <li><a href="#contacto" class="cta-button">Contacto</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="https://cdn.coverr.co/videos/coverr-abstract-technology-background-7045/1080p.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Transformamos Ideas en Soluciones Tecnológicas</h1>
+      <p class="hero-subtitle">Potenciamos tu negocio con inteligencia artificial, desarrollo web, apps móviles y estrategias digitales que generan resultados reales.</p>
+      <div class="hero-buttons">
+        <a href="#contacto" class="button-primary">Solicitar Cotización</a>
+        <a href="#servicios" class="button-secondary">Conocer Servicios</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 16l-6-6h12z"/>
+      </svg>
+    </div>
+  </section>
+
+  <section id="servicios" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <p class="section-description">Soluciones tecnológicas integrales diseñadas para impulsar tu negocio al siguiente nivel.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🤖</div>
+          <h3 class="service-title">Agentes de IA</h3>
+          <p class="service-description">Automatizamos tareas repetitivas con inteligencia artificial avanzada, liberando tiempo valioso para enfocarte en lo estratégico.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">💻</div>
+          <h3 class="service-title">Aplicaciones Web</h3>
+          <p class="service-description">Desarrollamos aplicaciones web personalizadas, escalables y optimizadas para ofrecer la mejor experiencia de usuario.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📱</div>
+          <h3 class="service-title">Apps Móviles</h3>
+          <p class="service-description">Creamos aplicaciones móviles nativas y multiplataforma que conectan tu negocio con tus clientes en cualquier momento.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🌐</div>
+          <h3 class="service-title">Sitios Web</h3>
+          <p class="service-description">Diseñamos y desarrollamos sitios web modernos, rápidos y optimizados para SEO que convierten visitantes en clientes.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📈</div>
+          <h3 class="service-title">Marketing Digital</h3>
+          <p class="service-description">Estrategias completas de marketing digital y posicionamiento en redes sociales para aumentar tu visibilidad y ventas.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🎯</div>
+          <h3 class="service-title">Consultoría Tech</h3>
+          <p class="service-description">Asesoramiento estratégico para optimizar procesos, adoptar nuevas tecnologías y maximizar el retorno de inversión.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beneficios" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Por Qué Elegirnos</h2>
+        <p class="section-description">Nos diferenciamos por nuestra capacidad de entregar soluciones innovadoras con resultados medibles.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-number">95%</div>
+          <h3 class="benefit-title">Eficiencia</h3>
+          <p class="benefit-description">Reducción promedio en tiempo de procesos manuales con nuestros agentes de IA y automatizaciones.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-number">100%</div>
+          <h3 class="benefit-title">Personalización</h3>
+          <p class="benefit-description">Cada solución se diseña específicamente para tu negocio, sin plantillas genéricas ni soluciones empaquetadas.</p>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-number">24/7</div>
+          <h3 class="benefit-title">Soporte</h3>
+          <p class="benefit-description">Acompañamiento continuo y soporte técnico para garantizar el óptimo funcionamiento de tu tecnología.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonios" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+        <p class="section-description">Empresas que confiaron en nosotros y transformaron su manera de trabajar.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Autobotec automatizó nuestro proceso de atención al cliente con un agente de IA. Ahora respondemos consultas 24/7 y nuestro equipo se enfoca en casos complejos. Increíble."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">MC</div>
+            <div class="author-info">
+              <h4>María Contreras</h4>
+              <p>Directora de Operaciones, TechFlow</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Necesitábamos una app móvil para nuestro e-commerce. El equipo de Autobotec entregó una solución profesional, intuitiva y en tiempo récord. Nuestras ventas móviles crecieron un 150%."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JR</div>
+            <div class="author-info">
+              <h4>Jorge Ramírez</h4>
+              <p>CEO, Retail Plus</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"La estrategia de marketing digital que diseñaron para nosotros triplicó nuestro alcance en redes sociales. Son expertos en entender lo que el mercado necesita."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AS</div>
+            <div class="author-info">
+              <h4>Ana Sánchez</h4>
+              <p>Marketing Manager, Innova Group</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="section contact-section">
+    <div class="container contact-content">
+      <div class="section-header">
+        <h2 class="section-title">Hablemos de Tu Proyecto</h2>
+        <p class="section-description">Cuéntanos tu idea y te ayudaremos a hacerla realidad con tecnología de vanguardia.</p>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <div id="formMessage"></div>
+        <div class="form-group">
+          <label for="name" class="form-label">Nombre Completo</label>
+          <input type="text" id="name" name="name" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <input type="email" id="email" name="email" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="company" class="form-label">Empresa</label>
+          <input type="text" id="company" name="company" class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="message" class="form-label">Cuéntanos sobre tu proyecto</label>
+          <textarea id="message" name="message" class="form-textarea" required></textarea>
+        </div>
+        <button type="submit" class="form-button">Enviar Mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Autobotec</h3>
+        <p style="color: rgba(255, 255, 255, 0.7); line-height: 1.5; margin-top: 16px;">Transformando negocios con tecnología innovadora y soluciones personalizadas.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Facebook">f</a>
+          <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+          <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+          <a href="#" class="social-link" aria-label="Instagram">📷</a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h3>Servicios</h3>
+        <ul class="footer-links">
+          <li><a href="#servicios" class="footer-link">Agentes de IA</a></li>
+          <li><a href="#servicios" class="footer-link">Desarrollo Web</a></li>
+          <li><a href="#servicios" class="footer-link">Apps Móviles</a></li>
+          <li><a href="#servicios" class="footer-link">Marketing Digital</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Empresa</h3>
+        <ul class="footer-links">
+          <li><a href="#beneficios" class="footer-link">Sobre Nosotros</a></li>
+          <li><a href="#testimonios" class="footer-link">Testimonios</a></li>
+          <li><a href="#contacto" class="footer-link">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contacto</h3>
+        <ul class="footer-links">
+          <li><a href="mailto:info@autobotec.net" class="footer-link">info@autobotec.net</a></li>
+          <li><a href="https://autobotec.net" class="footer-link" target="_blank">autobotec.net</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Autobotec. Todos los derechos reservados. | <a href="#" class="footer-link">Aviso Legal</a> | <a href="#" class="footer-link">Política de Privacidad</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
