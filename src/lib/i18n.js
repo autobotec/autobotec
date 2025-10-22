@@ -1,0 +1,307 @@
+const translations = {
+  es: {
+    'site.name': 'ENCUENTRAME',
+    'site.tagline': 'Encuentra lo que buscas',
+    'nav.login': 'Iniciar sesión',
+    'nav.register': 'Registrarse',
+    'nav.post_ad': 'Publicar anuncio',
+    'nav.dashboard': 'Mi cuenta',
+    'nav.logout': 'Cerrar sesión',
+
+    'age_verify.title': 'Verificación de edad',
+    'age_verify.message': 'Este sitio contiene contenido para adultos. Debes tener 18 años o más para continuar.',
+    'age_verify.confirm': 'Soy mayor de 18 años',
+    'age_verify.decline': 'Salir',
+    'age_verify.checkbox': 'Confirmo que soy mayor de edad y acepto los términos',
+
+    'home.hero.title': 'Encuentra lo que buscas',
+    'home.hero.subtitle': 'Miles de anuncios en tu ciudad. Explora, contacta y encuentra lo que necesitas.',
+    'home.search.placeholder': '¿Qué estás buscando?',
+    'home.search.button': 'Buscar',
+    'home.search.all_categories': 'Todas las categorías',
+    'home.search.all_cities': 'Todas las ciudades',
+
+    'home.select_country': 'Selecciona tu país',
+    'home.country.prompt': 'Elige tu ubicación para ver anuncios relevantes',
+
+    'categories.title': 'Explora por categoría',
+    'categories.female_escorts': 'Escorts Femeninas',
+    'categories.male_escorts': 'Escorts Masculinos',
+    'categories.trans': 'Trans',
+    'categories.massages': 'Masajes',
+    'categories.bdsm': 'BDSM',
+    'categories.couples': 'Parejas',
+    'categories.other': 'Otros',
+
+    'listing.view_details': 'Ver detalles',
+    'listing.contact': 'Contactar',
+    'listing.whatsapp': 'WhatsApp',
+    'listing.call': 'Llamar',
+    'listing.favorite': 'Guardar',
+    'listing.share': 'Compartir',
+    'listing.report': 'Reportar',
+    'listing.views': 'vistas',
+    'listing.age': 'Edad',
+    'listing.location': 'Ubicación',
+    'listing.travels': 'Viajo',
+    'listing.schedule': 'Horario',
+    'listing.languages': 'Idiomas',
+    'listing.payment': 'Forma de pago',
+
+    'post_ad.title': 'Publicar nuevo anuncio',
+    'post_ad.edit_title': 'Editar anuncio',
+    'post_ad.contact_info': 'Información de contacto',
+    'post_ad.phone': 'Teléfono',
+    'post_ad.whatsapp': 'WhatsApp',
+    'post_ad.email': 'Email',
+    'post_ad.location': 'Ubicación',
+    'post_ad.country': 'País',
+    'post_ad.state': 'Estado/Departamento',
+    'post_ad.city': 'Ciudad',
+    'post_ad.neighborhood': 'Barrio',
+    'post_ad.travels': '¿Viajas?',
+    'post_ad.travel_cities': '¿A dónde viajas?',
+    'post_ad.personal_info': 'Información personal',
+    'post_ad.age': 'Edad',
+    'post_ad.category': 'Categoría',
+    'post_ad.content': 'Contenido del anuncio',
+    'post_ad.title_field': 'Título del anuncio',
+    'post_ad.description': 'Descripción',
+    'post_ad.characteristics': 'Características del servicio',
+    'post_ad.service_type': 'Tipo de servicio',
+    'post_ad.attends_to': 'Atiendo a',
+    'post_ad.schedule_field': 'Horario',
+    'post_ad.languages_field': 'Idiomas',
+    'post_ad.payment_methods': 'Formas de pago',
+    'post_ad.social_media': 'Redes sociales',
+    'post_ad.website': 'Sitio web',
+    'post_ad.instagram': 'Instagram',
+    'post_ad.twitter': 'Twitter',
+    'post_ad.telegram': 'Telegram',
+    'post_ad.photos': 'Fotos',
+    'post_ad.upload_photos': 'Subir fotos',
+    'post_ad.videos': 'Videos (opcional)',
+    'post_ad.submit': 'Publicar anuncio',
+    'post_ad.preview': 'Vista previa',
+    'post_ad.success': 'Anuncio publicado exitosamente',
+    'post_ad.error': 'Error al publicar anuncio',
+
+    'dashboard.title': 'Mi cuenta',
+    'dashboard.welcome': 'Bienvenido',
+    'dashboard.my_ads': 'Mis anuncios',
+    'dashboard.statistics': 'Estadísticas',
+    'dashboard.messages': 'Mensajes',
+    'dashboard.favorites': 'Favoritos',
+    'dashboard.settings': 'Configuración',
+    'dashboard.total_views': 'Vistas totales',
+    'dashboard.total_favorites': 'Favoritos totales',
+    'dashboard.active_ads': 'Anuncios activos',
+
+    'auth.login': 'Iniciar sesión',
+    'auth.register': 'Registrarse',
+    'auth.email': 'Correo electrónico',
+    'auth.password': 'Contraseña',
+    'auth.username': 'Nombre de usuario',
+    'auth.confirm_password': 'Confirmar contraseña',
+    'auth.forgot_password': '¿Olvidaste tu contraseña?',
+    'auth.no_account': '¿No tienes cuenta?',
+    'auth.have_account': '¿Ya tienes cuenta?',
+    'auth.terms': 'Acepto los términos y condiciones',
+    'auth.age_confirm': 'Confirmo que soy mayor de 18 años',
+
+    'footer.about': 'Sobre nosotros',
+    'footer.terms': 'Términos de servicio',
+    'footer.privacy': 'Política de privacidad',
+    'footer.cookies': 'Política de cookies',
+    'footer.parental_control': 'Control parental',
+    'footer.help': 'Centro de ayuda',
+    'footer.contact': 'Contacto',
+    'footer.categories': 'Categorías',
+    'footer.information': 'Información',
+    'footer.rights': 'Todos los derechos reservados',
+
+    'common.loading': 'Cargando...',
+    'common.error': 'Error',
+    'common.success': 'Éxito',
+    'common.cancel': 'Cancelar',
+    'common.save': 'Guardar',
+    'common.delete': 'Eliminar',
+    'common.edit': 'Editar',
+    'common.back': 'Volver',
+    'common.next': 'Siguiente',
+    'common.previous': 'Anterior',
+    'common.close': 'Cerrar',
+    'common.yes': 'Sí',
+    'common.no': 'No',
+  },
+  en: {
+    'site.name': 'FIND ME',
+    'site.tagline': 'Find what you\'re looking for',
+    'nav.login': 'Login',
+    'nav.register': 'Register',
+    'nav.post_ad': 'Post Ad',
+    'nav.dashboard': 'My Account',
+    'nav.logout': 'Logout',
+
+    'age_verify.title': 'Age Verification',
+    'age_verify.message': 'This site contains adult content. You must be 18 years or older to continue.',
+    'age_verify.confirm': 'I am 18 or older',
+    'age_verify.decline': 'Exit',
+    'age_verify.checkbox': 'I confirm I am of legal age and accept the terms',
+
+    'home.hero.title': 'Find what you\'re looking for',
+    'home.hero.subtitle': 'Thousands of ads in your city. Browse, connect and find what you need.',
+    'home.search.placeholder': 'What are you looking for?',
+    'home.search.button': 'Search',
+    'home.search.all_categories': 'All categories',
+    'home.search.all_cities': 'All cities',
+
+    'home.select_country': 'Select your country',
+    'home.country.prompt': 'Choose your location to see relevant ads',
+
+    'categories.title': 'Browse by category',
+    'categories.female_escorts': 'Female Escorts',
+    'categories.male_escorts': 'Male Escorts',
+    'categories.trans': 'Trans',
+    'categories.massages': 'Massages',
+    'categories.bdsm': 'BDSM',
+    'categories.couples': 'Couples',
+    'categories.other': 'Other',
+
+    'listing.view_details': 'View details',
+    'listing.contact': 'Contact',
+    'listing.whatsapp': 'WhatsApp',
+    'listing.call': 'Call',
+    'listing.favorite': 'Save',
+    'listing.share': 'Share',
+    'listing.report': 'Report',
+    'listing.views': 'views',
+    'listing.age': 'Age',
+    'listing.location': 'Location',
+    'listing.travels': 'I travel',
+    'listing.schedule': 'Schedule',
+    'listing.languages': 'Languages',
+    'listing.payment': 'Payment',
+
+    'post_ad.title': 'Post new ad',
+    'post_ad.edit_title': 'Edit ad',
+    'post_ad.contact_info': 'Contact information',
+    'post_ad.phone': 'Phone',
+    'post_ad.whatsapp': 'WhatsApp',
+    'post_ad.email': 'Email',
+    'post_ad.location': 'Location',
+    'post_ad.country': 'Country',
+    'post_ad.state': 'State/Department',
+    'post_ad.city': 'City',
+    'post_ad.neighborhood': 'Neighborhood',
+    'post_ad.travels': 'Do you travel?',
+    'post_ad.travel_cities': 'Where do you travel?',
+    'post_ad.personal_info': 'Personal information',
+    'post_ad.age': 'Age',
+    'post_ad.category': 'Category',
+    'post_ad.content': 'Ad content',
+    'post_ad.title_field': 'Ad title',
+    'post_ad.description': 'Description',
+    'post_ad.characteristics': 'Service characteristics',
+    'post_ad.service_type': 'Service type',
+    'post_ad.attends_to': 'I attend to',
+    'post_ad.schedule_field': 'Schedule',
+    'post_ad.languages_field': 'Languages',
+    'post_ad.payment_methods': 'Payment methods',
+    'post_ad.social_media': 'Social media',
+    'post_ad.website': 'Website',
+    'post_ad.instagram': 'Instagram',
+    'post_ad.twitter': 'Twitter',
+    'post_ad.telegram': 'Telegram',
+    'post_ad.photos': 'Photos',
+    'post_ad.upload_photos': 'Upload photos',
+    'post_ad.videos': 'Videos (optional)',
+    'post_ad.submit': 'Publish ad',
+    'post_ad.preview': 'Preview',
+    'post_ad.success': 'Ad published successfully',
+    'post_ad.error': 'Error publishing ad',
+
+    'dashboard.title': 'My Account',
+    'dashboard.welcome': 'Welcome',
+    'dashboard.my_ads': 'My ads',
+    'dashboard.statistics': 'Statistics',
+    'dashboard.messages': 'Messages',
+    'dashboard.favorites': 'Favorites',
+    'dashboard.settings': 'Settings',
+    'dashboard.total_views': 'Total views',
+    'dashboard.total_favorites': 'Total favorites',
+    'dashboard.active_ads': 'Active ads',
+
+    'auth.login': 'Login',
+    'auth.register': 'Register',
+    'auth.email': 'Email',
+    'auth.password': 'Password',
+    'auth.username': 'Username',
+    'auth.confirm_password': 'Confirm password',
+    'auth.forgot_password': 'Forgot your password?',
+    'auth.no_account': 'Don\'t have an account?',
+    'auth.have_account': 'Already have an account?',
+    'auth.terms': 'I accept the terms and conditions',
+    'auth.age_confirm': 'I confirm I am 18 or older',
+
+    'footer.about': 'About us',
+    'footer.terms': 'Terms of service',
+    'footer.privacy': 'Privacy policy',
+    'footer.cookies': 'Cookie policy',
+    'footer.parental_control': 'Parental control',
+    'footer.help': 'Help center',
+    'footer.contact': 'Contact',
+    'footer.categories': 'Categories',
+    'footer.information': 'Information',
+    'footer.rights': 'All rights reserved',
+
+    'common.loading': 'Loading...',
+    'common.error': 'Error',
+    'common.success': 'Success',
+    'common.cancel': 'Cancel',
+    'common.save': 'Save',
+    'common.delete': 'Delete',
+    'common.edit': 'Edit',
+    'common.back': 'Back',
+    'common.next': 'Next',
+    'common.previous': 'Previous',
+    'common.close': 'Close',
+    'common.yes': 'Yes',
+    'common.no': 'No',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'es';
+
+export function setLanguage(lang) {
+  if (translations[lang]) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
+    updatePageTranslations();
+  }
+}
+
+export function getLanguage() {
+  return currentLang;
+}
+
+export function t(key) {
+  return translations[currentLang][key] || key;
+}
+
+export function updatePageTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    element.textContent = t(key);
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+    const key = element.getAttribute('data-i18n-placeholder');
+    element.placeholder = t(key);
+  });
+}
+
+export function initI18n() {
+  setLanguage(currentLang);
+}

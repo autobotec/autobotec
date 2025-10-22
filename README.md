@@ -1,203 +1,187 @@
-# FIND ME - Adult Classifieds Platform
+# ENCUENTRAME / FIND ME
 
-A modern, bilingual (English/Spanish) adult entertainment classifieds platform built with Vanilla JavaScript, Vite, and Supabase.
+A professional bilingual adult classifieds platform built with Vanilla JavaScript, Vite, and Supabase.
 
 ## Features
 
-### For Users
-- 🌐 **Bilingual Interface** - Full support for English and Spanish
-- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
-- 🔐 **User Authentication** - Secure login and registration
-- 📝 **Post Ads** - Create and manage your own listings
-- ❤️ **Likes System** - Like your favorite listings
-- 📊 **User Dashboard** - Track your ads, views, likes, and shares
-- ✏️ **Edit & Delete** - Full control over your listings
+### Bilingual Support (ES/EN)
+- Complete Spanish and English interface
+- Language switcher with flag icons
+- All content translated dynamically
 
-### For Administrators
-- 🎛️ **Admin Dashboard** - Comprehensive overview of platform statistics
-- 📊 **Top Statistics** - View most viewed and most liked listings
-- 🔧 **Manage All Listings** - Block, unblock, feature, or delete any listing
-- 👥 **User Management** - Full control over user accounts
-- 📈 **Analytics** - Track total views, likes, shares, and user engagement
+### Geographic System
+- 11 Latin American countries + USA
+- Hierarchical location system: Country > State/Department > City
+- Dynamic cascading selectors
+
+### For Users
+- Age verification modal (18+)
+- Complete registration and authentication
+- Create detailed listings with photos/videos
+- User dashboard with statistics
+- Favorites system
+- Advanced search and filters
+
+### For Advertisers
+- Detailed ad posting form with:
+  - Contact information (phone, WhatsApp, email)
+  - Location details with travel options
+  - 5 service characteristic selectors
+  - Social media links
+  - Photo and video uploads
+- Analytics per listing
+- Premium services marketplace
+
+### Categories
+- Female Escorts
+- Male Escorts
+- Trans
+- Massages
+- BDSM
+- Couples
+- Other
 
 ## Tech Stack
 
 - **Frontend**: Vanilla JavaScript (ES6+)
-- **Build Tool**: Vite
+- **Build Tool**: Vite 5
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
+- **Storage**: Supabase Storage (for media)
 - **Styling**: Custom CSS with CSS Variables
-- **Routing**: Custom lightweight router
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables in `.env`:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. Run development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Build for production:
+   ```bash
+   npm run build
+   ```
 
 ## Project Structure
 
 ```
 project/
 ├── src/
+│   ├── lib/
+│   │   ├── supabase.js         # Supabase client
+│   │   ├── i18n.js             # Internationalization system
+│   │   ├── router.js           # Client-side routing
+│   │   └── utils.js            # Utility functions
+│   ├── components/
+│   │   ├── Header.js           # Navigation header
+│   │   ├── Footer.js           # Site footer
+│   │   ├── AgeVerificationModal.js
+│   │   ├── CountrySelector.js
+│   │   └── ListingCard.js
 │   ├── pages/
-│   │   ├── AdminDashboardPage.js    # Admin statistics dashboard
-│   │   ├── AdminListingsPage.js     # Manage all listings
-│   │   ├── UserDashboardPage.js     # User personal dashboard
-│   │   └── EditAdPage.js            # Edit listing page
-│   ├── i18n.js                      # Internationalization
-│   ├── main.js                      # Application entry point
-│   ├── router.js                    # Client-side routing
-│   ├── styles.css                   # Global styles
-│   └── supabase.js                  # Supabase client
-├── supabase/
-│   └── migrations/                  # Database migrations
+│   │   ├── HomePage.js
+│   │   ├── CountryPage.js
+│   │   ├── CategoryPage.js
+│   │   ├── CityPage.js
+│   │   ├── ListingDetailPage.js
+│   │   ├── AuthPage.js
+│   │   ├── PostAdPage.js
+│   │   ├── EditAdPage.js
+│   │   ├── UserDashboardPage.js
+│   │   └── SearchPage.js
+│   ├── styles.css              # Global styles
+│   └── main.js                 # Application entry point
 ├── index.html
 ├── package.json
 └── README.md
 ```
 
-## Installation
+## Database Schema
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd project
-   ```
+### Main Tables
+- `profiles` - User profiles with roles
+- `countries` - 11 countries
+- `states` - States/Departments/Provinces
+- `cities` - Cities
+- `categories` - Service categories
+- `listings` - User advertisements
+- `listing_media` - Photos and videos
+- `listing_views` - Analytics
+- `favorites` - Saved listings
+- `reports` - Content moderation
+- `reviews` - Optional ratings
+- `messages` - User-admin communication
+- `support_tickets` - Support system
+- `premium_services` - Monetization services
+- `transactions` - Payment records
+- `user_subscriptions` - Active subscriptions
+- `platform_analytics` - Platform statistics
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+## URL Structure
 
-3. **Set up environment variables**
+### Main Site
+- `/` - Home page with age verification and country selector
 
-   Create a `.env` file in the root directory:
-   ```env
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+### Country Microsites
+- `/us/` - United States site
+- `/co/` - Colombia site
+- `/br/` - Brazil site
+- etc.
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+### Category & City Pages
+- `/:country/:category/` - Category in country
+- `/:country/:category/:city/` - Category in specific city
 
-5. **Build for production**
-   ```bash
-   npm run build
-   ```
+### Listing Pages
+- `/:country/:category/:slug/:id/` - Individual listing detail
 
-## Database Setup
+### User Pages
+- `/auth` - Login/Register
+- `/dashboard` - User dashboard
+- `/post-ad` - Create new listing
+- `/edit-ad/:id` - Edit listing
 
-The project uses Supabase as the backend. The database schema includes:
+## Security Features
 
-### Tables
-- `profiles` - User profiles with role-based access
-- `categories` - Ad categories (bilingual)
-- `locations` - Geographic locations (bilingual)
-- `listings` - User advertisements with full metadata
-- `listing_likes` - Like tracking system
-- `listing_shares` - Share tracking system
+- Age verification (18+)
+- Row Level Security (RLS) on all tables
+- Role-based access control
+- Content moderation system
+- Report system for inappropriate content
+- Secure authentication with Supabase Auth
 
-### Security
-- Row Level Security (RLS) enabled on all tables
-- Admin role-based access control
-- Secure authentication policies
+## Legal Pages
 
-### Migrations
-All database migrations are located in `supabase/migrations/`. To apply them to your Supabase project, use the Supabase CLI or run them manually in the SQL Editor.
+- Privacy Policy
+- Terms of Service
+- Cookie Policy
+- Parental Control Help
 
-## Creating an Admin User
+## SEO Features
 
-After registering a regular account, promote it to admin using the Supabase SQL Editor:
-
-```sql
-UPDATE profiles
-SET role = 'admin'
-WHERE email = 'your-email@example.com';
-```
-
-## Available Routes
-
-### Public Routes
-- `/` - Home page with categories and featured listings
-
-### User Routes (Authentication Required)
-- `/dashboard` - User personal dashboard
-- `/edit-ad/:id` - Edit user's own listing
-
-### Admin Routes (Admin Role Required)
-- `/admin` - Admin dashboard with statistics
-- `/admin/listings` - Manage all platform listings
-
-## Key Features Explained
-
-### Bilingual Support
-- Automatic language detection from localStorage
-- Seamless language switching without page reload
-- All content stored in both English and Spanish
-
-### Admin Dashboard
-The admin dashboard provides:
-- Total listings, active listings, pending reviews
-- Total users, views, likes, and shares
-- Top 10 most viewed listings
-- Top 10 most liked listings
-- Recent listings with quick actions
-
-### Listing Management
-Admins can:
-- Change listing status (Active, Pending, Inactive, Expired)
-- Mark listings as Featured (premium ranking)
-- Delete any listing
-- Filter by status
-
-### User Dashboard
-Users can:
-- View their own statistics
-- See all their listings with metrics
-- Edit their listings
-- Delete their listings
-
-## Design Philosophy
-
-- **Clean & Modern** - Professional design with attention to detail
-- **User-Friendly** - Intuitive navigation and clear actions
-- **Performance** - Optimized loading and rendering
-- **Accessibility** - Semantic HTML and proper contrast ratios
-- **Responsive** - Mobile-first approach
-
-## Color Palette
-
-- Primary: `#e91e63` (Pink)
-- Secondary: `#ff4081` (Light Pink)
-- Success: `#10b981` (Green)
-- Error: `#ef4444` (Red)
-- Warning: `#f59e0b` (Orange)
-
-## Development
-
-### Scripts
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-
-### Code Style
-- ES6+ JavaScript
-- Modular architecture
-- Component-based pages
-- Async/await for API calls
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+- Dynamic meta tags
+- Open Graph tags
+- Sitemap generation
+- Structured data (Schema.org)
+- Canonical URLs
+- Hreflang tags for bilingual content
 
 ## License
 
-This project is proprietary software. All rights reserved.
+Proprietary - All rights reserved
 
 ## Support
 
-For issues or questions, please contact the development team.
-
----
-
-Built with ❤️ using Vite, Supabase, and Vanilla JavaScript
+For support, contact: support@encuentrame.com

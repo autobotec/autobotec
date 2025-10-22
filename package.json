@@ -1,7 +1,8 @@
 {
-  "name": "autobotec-landing",
+  "name": "encuentrame-findme",
   "version": "1.0.0",
   "type": "module",
+  "description": "ENCUENTRAME / FIND ME - Bilingual Adult Classifieds Platform",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
