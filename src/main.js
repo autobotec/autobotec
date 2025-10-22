@@ -290,6 +290,7 @@ class App {
       btn.addEventListener('click', () => {
         const lang = btn.dataset.lang;
         i18n.setLanguage(lang);
+        this.render();
       });
     });
 

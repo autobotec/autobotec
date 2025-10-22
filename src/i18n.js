@@ -281,7 +281,6 @@ export class I18n {
   setLanguage(lang) {
     this.currentLang = lang;
     localStorage.setItem('language', lang);
-    window.location.reload();
   }
 
   t(key) {
