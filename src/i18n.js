@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    siteName: 'Adult Classifieds',
+    siteName: 'FIND ME',
     nav: {
       home: 'Home',
       categories: 'Categories',

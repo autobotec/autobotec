@@ -1,431 +1,307 @@
-import { createClient } from '@supabase/supabase-js';
+import './styles.css';
+import { supabase } from './supabase.js';
+import { i18n } from './i18n.js';
+import { router } from './router.js';
+import { AdminDashboardPage } from './pages/AdminDashboardPage.js';
+import { AdminListingsPage } from './pages/AdminListingsPage.js';
+import { UserDashboardPage } from './pages/UserDashboardPage.js';
+import { EditAdPage } from './pages/EditAdPage.js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-let currentLang = 'es';
-let currentUser = null;
-let categories = [];
-let locations = [];
-let listings = [];
-
-const translations = {
-  es: {
-    login: 'Iniciar sesión',
-    register: 'Registrarse',
-    postAd: 'Publicar anuncio',
-    logout: 'Cerrar sesión',
-    loginTitle: 'Iniciar sesión',
-    registerTitle: 'Crear cuenta',
-    noAds: 'No se encontraron anuncios',
-    tryDifferent: 'Intenta con otros filtros',
-    loadingCategories: 'Cargando categorías...',
-    loadingAds: 'Cargando anuncios...',
-    allCategories: 'Todas las categorías',
-    allCities: 'Todas las ciudades'
-  },
-  en: {
-    login: 'Login',
-    register: 'Register',
-    postAd: 'Post Ad',
-    logout: 'Logout',
-    loginTitle: 'Login',
-    registerTitle: 'Create Account',
-    noAds: 'No ads found',
-    tryDifferent: 'Try different filters',
-    loadingCategories: 'Loading categories...',
-    loadingAds: 'Loading ads...',
-    allCategories: 'All categories',
-    allCities: 'All cities'
+class App {
+  constructor() {
+    this.container = document.getElementById('app');
+    this.currentUser = null;
+    this.userProfile = null;
+    this.init();
   }
-};
 
-function updateLanguage(lang) {
-  currentLang = lang;
-  document.documentElement.setAttribute('data-lang', lang);
+  async init() {
+    await this.checkAuth();
+    this.setupRouter();
+    this.render();
+    this.setupAuthListener();
+  }
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
+  async checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    this.currentUser = session?.user || null;
 
-  document.querySelectorAll('[data-es], [data-en]').forEach(el => {
-    const text = el.dataset[lang];
-    if (text) {
-      if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
-        el.placeholder = el.dataset[`placeholder${lang === 'es' ? 'Es' : 'En'}`] || text;
-      } else {
-        el.textContent = text;
-      }
+    if (this.currentUser) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', this.currentUser.id)
+        .maybeSingle();
+
+      this.userProfile = data;
     }
-  });
-
-  document.querySelectorAll('option[data-es], option[data-en]').forEach(opt => {
-    const text = opt.dataset[lang];
-    if (text) opt.textContent = text;
-  });
-
-  updateAuthButtons();
-}
-
-document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    updateLanguage(btn.dataset.lang);
-  });
-});
-
-async function checkAuth() {
-  const { data: { user } } = await supabase.auth.getUser();
-  currentUser = user;
-  updateAuthButtons();
-}
-
-function updateAuthButtons() {
-  const loginBtn = document.getElementById('loginBtn');
-  const registerBtn = document.getElementById('registerBtn');
-
-  if (currentUser) {
-    loginBtn.textContent = translations[currentLang].logout;
-    loginBtn.onclick = async (e) => {
-      e.preventDefault();
-      await supabase.auth.signOut();
-      currentUser = null;
-      updateAuthButtons();
-    };
-    registerBtn.textContent = translations[currentLang].postAd;
-    registerBtn.onclick = (e) => {
-      e.preventDefault();
-      alert('Post ad form - to be implemented');
-    };
-  } else {
-    loginBtn.textContent = translations[currentLang].login;
-    loginBtn.onclick = (e) => {
-      e.preventDefault();
-      openAuthModal('login');
-    };
-    registerBtn.textContent = translations[currentLang].register;
-    registerBtn.onclick = (e) => {
-      e.preventDefault();
-      openAuthModal('register');
-    };
-  }
-}
-
-function openAuthModal(mode) {
-  const modal = document.getElementById('authModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const usernameGroup = document.getElementById('usernameGroup');
-  const authSubmitBtn = document.getElementById('authSubmitBtn');
-
-  if (mode === 'login') {
-    modalTitle.textContent = translations[currentLang].loginTitle;
-    usernameGroup.style.display = 'none';
-    authSubmitBtn.textContent = translations[currentLang].login;
-  } else {
-    modalTitle.textContent = translations[currentLang].registerTitle;
-    usernameGroup.style.display = 'block';
-    authSubmitBtn.textContent = translations[currentLang].register;
   }
 
-  modal.classList.add('active');
-  modal.dataset.mode = mode;
-}
-
-document.getElementById('closeModal').addEventListener('click', () => {
-  const modal = document.getElementById('authModal');
-  modal.classList.remove('active');
-  document.getElementById('authForm').reset();
-  document.getElementById('authMessage').innerHTML = '';
-});
-
-document.getElementById('authModal').addEventListener('click', (e) => {
-  if (e.target.id === 'authModal') {
-    document.getElementById('closeModal').click();
-  }
-});
-
-document.getElementById('authForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const mode = document.getElementById('authModal').dataset.mode;
-  const email = document.getElementById('authEmail').value;
-  const password = document.getElementById('authPassword').value;
-  const username = document.getElementById('username').value;
-  const authMessage = document.getElementById('authMessage');
-  const authSubmitBtn = document.getElementById('authSubmitBtn');
-
-  authSubmitBtn.disabled = true;
-  authMessage.innerHTML = '';
-
-  try {
-    if (mode === 'register') {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { username }
+  setupAuthListener() {
+    supabase.auth.onAuthStateChange((_event, session) => {
+      (async () => {
+        this.currentUser = session?.user || null;
+        if (this.currentUser) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', this.currentUser.id)
+            .maybeSingle();
+          this.userProfile = data;
+        } else {
+          this.userProfile = null;
         }
-      });
-
-      if (error) throw error;
-
-      await supabase.from('profiles').insert([{
-        id: data.user.id,
-        username: username,
-        email: email
-      }]);
-
-      authMessage.innerHTML = '<div class="form-message success">Account created successfully!</div>';
-      setTimeout(() => {
-        document.getElementById('closeModal').click();
-        currentUser = data.user;
-        updateAuthButtons();
-      }, 1500);
-    } else {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) throw error;
-
-      authMessage.innerHTML = '<div class="form-message success">Login successful!</div>';
-      setTimeout(() => {
-        document.getElementById('closeModal').click();
-        currentUser = data.user;
-        updateAuthButtons();
-      }, 1000);
-    }
-  } catch (error) {
-    console.error('Auth error:', error);
-    authMessage.innerHTML = `<div class="form-message error">${error.message}</div>`;
-  } finally {
-    authSubmitBtn.disabled = false;
-  }
-});
-
-async function loadCategories() {
-  try {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .order('order_index', { ascending: true });
-
-    if (error) throw error;
-
-    categories = data || [];
-    renderCategories();
-    updateCategoryFilter();
-  } catch (error) {
-    console.error('Error loading categories:', error);
-    document.getElementById('categoriesGrid').innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">😕</div>
-        <p class="empty-state-text">Error loading categories</p>
-      </div>
-    `;
-  }
-}
-
-function renderCategories() {
-  const grid = document.getElementById('categoriesGrid');
-
-  if (categories.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">📂</div>
-        <p class="empty-state-text">${translations[currentLang].loadingCategories}</p>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = categories.map(cat => `
-    <a href="#" class="category-card" data-category="${cat.id}">
-      <span class="category-icon">${cat.icon || '📁'}</span>
-      <div class="category-name">${currentLang === 'es' ? cat.name_es : cat.name_en}</div>
-      <div class="category-count">0 ads</div>
-    </a>
-  `).join('');
-
-  document.querySelectorAll('.category-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      const categoryId = card.dataset.category;
-      document.getElementById('categoryFilter').value = categoryId;
-      filterListings();
-      document.getElementById('listingsGrid').scrollIntoView({ behavior: 'smooth' });
+        this.render();
+      })();
     });
-  });
-}
-
-function updateCategoryFilter() {
-  const select = document.getElementById('categoryFilter');
-  select.innerHTML = `<option value="">${translations[currentLang].allCategories}</option>` +
-    categories.map(cat => `
-      <option value="${cat.id}">${currentLang === 'es' ? cat.name_es : cat.name_en}</option>
-    `).join('');
-}
-
-async function loadLocations() {
-  try {
-    const { data, error } = await supabase
-      .from('locations')
-      .select('*')
-      .eq('type', 'city')
-      .order('name_es', { ascending: true });
-
-    if (error) throw error;
-
-    locations = data || [];
-    updateLocationFilter();
-  } catch (error) {
-    console.error('Error loading locations:', error);
   }
-}
 
-function updateLocationFilter() {
-  const select = document.getElementById('locationFilter');
-  select.innerHTML = `<option value="">${translations[currentLang].allCities}</option>` +
-    locations.map(loc => `
-      <option value="${loc.id}">${currentLang === 'es' ? loc.name_es : loc.name_en}</option>
-    `).join('');
-}
+  setupRouter() {
+    router.on('/admin', () => this.renderPage(AdminDashboardPage));
+    router.on('/admin/listings', () => this.renderPage(AdminListingsPage));
+    router.on('/dashboard', () => this.renderPage(UserDashboardPage));
+    router.on('/edit-ad/:id', (params) => this.renderPage(EditAdPage, params));
+    router.on('/', () => this.renderHome());
 
-async function loadListings() {
-  try {
-    const { data, error } = await supabase
-      .from('listings')
-      .select(`
-        *,
-        category:categories(name_es, name_en),
-        location:locations(name_es, name_en),
-        images:listing_images(image_url, order_index)
-      `)
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
-      .limit(50);
+    router.resolve();
+  }
 
-    if (error) throw error;
-
-    listings = data || [];
-    renderListings(listings);
-  } catch (error) {
-    console.error('Error loading listings:', error);
-    document.getElementById('listingsGrid').innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">😕</div>
-        <p class="empty-state-text">Error loading ads</p>
-      </div>
+  render() {
+    this.container.innerHTML = `
+      ${this.renderHeader()}
+      <main class="main-content" id="page-content"></main>
+      ${this.renderFooter()}
     `;
-  }
-}
 
-function renderListings(items) {
-  const grid = document.getElementById('listingsGrid');
-
-  if (items.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">🔍</div>
-        <p class="empty-state-text">${translations[currentLang].noAds}</p>
-        <p>${translations[currentLang].tryDifferent}</p>
-      </div>
-    `;
-    return;
+    this.attachHeaderEvents();
+    router.resolve();
   }
 
-  grid.innerHTML = items.map(listing => {
-    const image = listing.images && listing.images.length > 0
-      ? listing.images[0].image_url
-      : 'https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=400';
-
-    const title = currentLang === 'es' ? listing.title_es : listing.title_en;
-    const description = currentLang === 'es' ? listing.description_es : listing.description_en;
-    const location = listing.location
-      ? (currentLang === 'es' ? listing.location.name_es : listing.location.name_en)
-      : '';
+  renderHeader() {
+    const t = i18n.t.bind(i18n);
+    const currentLang = i18n.getCurrentLanguage();
+    const isAdmin = this.userProfile?.role === 'admin';
 
     return `
-      <a href="#" class="listing-card" data-listing="${listing.id}">
-        ${listing.featured ? '<div class="featured-badge">Featured</div>' : ''}
-        <img src="${image}" alt="${title}" class="listing-image" loading="lazy">
-        <div class="listing-content">
-          <h3 class="listing-title">${title}</h3>
-          <p class="listing-description">${description}</p>
-          <div class="listing-meta">
-            <span class="listing-location">📍 ${location}</span>
-            ${listing.price ? `<span class="listing-price">$${listing.price}</span>` : ''}
+      <header class="header">
+        <div class="header-container">
+          <a href="/" class="logo">
+            <span class="logo-icon">💋</span>
+            <span>${t('siteName')}</span>
+          </a>
+
+          <nav>
+            <ul class="nav-menu">
+              <li><a href="/" class="nav-link">${t('nav.home')}</a></li>
+              ${this.currentUser ? `
+                ${isAdmin ? `
+                  <li><a href="/admin" class="nav-link">Admin Panel</a></li>
+                ` : `
+                  <li><a href="/dashboard" class="nav-link">${t('nav.dashboard')}</a></li>
+                `}
+                <li><a href="#" id="logout-btn" class="nav-link">${t('nav.logout')}</a></li>
+              ` : `
+                <li><a href="/auth" class="nav-link">${t('nav.login')}</a></li>
+              `}
+            </ul>
+          </nav>
+
+          <div class="language-switcher">
+            <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en" title="English">
+              🇺🇸
+            </button>
+            <button class="lang-btn ${currentLang === 'es' ? 'active' : ''}" data-lang="es" title="Español">
+              🇪🇸
+            </button>
           </div>
         </div>
-      </a>
+      </header>
     `;
-  }).join('');
+  }
 
-  document.querySelectorAll('.listing-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      const listingId = card.dataset.listing;
-      alert(`View listing details: ${listingId}`);
+  renderFooter() {
+    const t = i18n.t.bind(i18n);
+
+    return `
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-grid">
+            <div class="footer-section">
+              <h3>${t('footer.about')}</h3>
+              <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin-top: 16px;">
+                ${t('footer.aboutText')}
+              </p>
+            </div>
+
+            <div class="footer-section">
+              <h3>${t('footer.quickLinks')}</h3>
+              <ul class="footer-links">
+                <li><a href="/" class="footer-link">${t('footer.categories')}</a></li>
+                <li><a href="/" class="footer-link">${t('footer.locations')}</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-section">
+              <h3>${t('footer.legal')}</h3>
+              <ul class="footer-links">
+                <li><a href="#" class="footer-link">${t('footer.terms')}</a></li>
+                <li><a href="#" class="footer-link">${t('footer.privacy')}</a></li>
+                <li><a href="#" class="footer-link">${t('footer.contact')}</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <p>${t('footer.copyright')}</p>
+          </div>
+        </div>
+      </footer>
+    `;
+  }
+
+  renderPage(PageComponent, params = {}) {
+    const pageContent = document.getElementById('page-content');
+    if (pageContent) {
+      const page = new PageComponent(params);
+      pageContent.innerHTML = page.render();
+      if (page.afterRender) {
+        page.afterRender();
+      }
+    }
+  }
+
+  renderHome() {
+    const pageContent = document.getElementById('page-content');
+    const t = i18n.t.bind(i18n);
+
+    if (pageContent) {
+      pageContent.innerHTML = `
+        <div class="hero">
+          <div class="hero-content">
+            <h1 class="hero-title">${t('hero.title')}</h1>
+            <p class="hero-subtitle">${t('hero.subtitle')}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">${t('categories.title')}</h2>
+          <div class="categories-grid" id="categories-grid">
+            <div class="loading">${t('common.loading')}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Featured Ads</h2>
+          <div class="listings-grid" id="featured-listings">
+            <div class="loading">${t('common.loading')}</div>
+          </div>
+        </div>
+      `;
+
+      this.loadHomeData();
+    }
+  }
+
+  async loadHomeData() {
+    const lang = i18n.getCurrentLanguage();
+    const t = i18n.t.bind(i18n);
+
+    const [categoriesRes, listingsRes] = await Promise.all([
+      supabase.from('categories').select('*').order('order_index'),
+      supabase.from('listings')
+        .select(`
+          *,
+          category:categories(name_en, name_es),
+          location:locations(name_en, name_es)
+        `)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(8)
+    ]);
+
+    const categories = categoriesRes.data || [];
+    const listings = listingsRes.data || [];
+
+    const categoriesGrid = document.getElementById('categories-grid');
+    if (categoriesGrid) {
+      categoriesGrid.innerHTML = categories.map(cat => `
+        <div class="category-card">
+          <div class="category-icon">${cat.icon || '📁'}</div>
+          <div class="category-name">${lang === 'en' ? cat.name_en : cat.name_es}</div>
+        </div>
+      `).join('');
+    }
+
+    const featuredGrid = document.getElementById('featured-listings');
+    if (featuredGrid) {
+      if (listings.length === 0) {
+        featuredGrid.innerHTML = `<p>${t('common.noResults')}</p>`;
+      } else {
+        featuredGrid.innerHTML = listings.map(listing => {
+          const title = lang === 'en' ? listing.title_en : listing.title_es;
+          const locationName = listing.location ?
+            (lang === 'en' ? listing.location.name_en : listing.location.name_es) :
+            '';
+
+          return `
+            <div class="listing-card">
+              ${listing.featured ? `<span class="badge badge-featured">${t('listing.featured')}</span>` : ''}
+              <img
+                src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=400"
+                alt="${title}"
+                class="listing-image"
+              />
+              <div class="listing-content">
+                <h3 class="listing-title">${title}</h3>
+                <div class="listing-meta">
+                  <span class="listing-location">📍 ${locationName}</span>
+                  ${listing.price ? `<span class="listing-price">$${listing.price}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+  }
+
+  attachHeaderEvents() {
+    const langButtons = document.querySelectorAll('.lang-btn');
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        i18n.setLanguage(lang);
+      });
     });
-  });
-}
 
-function filterListings() {
-  const searchText = document.getElementById('searchInput').value.toLowerCase();
-  const categoryId = document.getElementById('categoryFilter').value;
-  const locationId = document.getElementById('locationFilter').value;
-  const sortBy = document.getElementById('sortFilter').value;
-
-  let filtered = [...listings];
-
-  if (searchText) {
-    filtered = filtered.filter(listing => {
-      const title = (currentLang === 'es' ? listing.title_es : listing.title_en).toLowerCase();
-      const desc = (currentLang === 'es' ? listing.description_es : listing.description_en).toLowerCase();
-      return title.includes(searchText) || desc.includes(searchText);
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href && href !== '#') {
+          router.navigate(href);
+        }
+      });
     });
-  }
 
-  if (categoryId) {
-    filtered = filtered.filter(listing => listing.category_id === categoryId);
-  }
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await supabase.auth.signOut();
+        router.navigate('/');
+      });
+    }
 
-  if (locationId) {
-    filtered = filtered.filter(listing => listing.location_id === locationId);
+    const logoLink = document.querySelector('.logo');
+    if (logoLink) {
+      logoLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        router.navigate('/');
+      });
+    }
   }
-
-  switch (sortBy) {
-    case 'oldest':
-      filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-      break;
-    case 'price_low':
-      filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
-      break;
-    case 'price_high':
-      filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
-      break;
-    default:
-      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }
-
-  renderListings(filtered);
 }
 
-document.getElementById('searchBtn').addEventListener('click', filterListings);
-document.getElementById('searchInput').addEventListener('keyup', (e) => {
-  if (e.key === 'Enter') filterListings();
-});
-document.getElementById('categoryFilter').addEventListener('change', filterListings);
-document.getElementById('locationFilter').addEventListener('change', filterListings);
-document.getElementById('sortFilter').addEventListener('change', filterListings);
-
-async function init() {
-  await checkAuth();
-  await loadCategories();
-  await loadLocations();
-  await loadListings();
-  updateLanguage('es');
-}
-
-init();
+new App();
