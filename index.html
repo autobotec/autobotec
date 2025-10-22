@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autobotec - Servicios Tecnológicos Innovadores</title>
-  <meta name="description" content="Autobotec ofrece servicios tecnológicos innovadores: agentes de IA, desarrollo web y móvil, y estrategias de marketing digital.">
+  <title>ENCUENTRAME - Clasificados</title>
+  <meta name="description" content="Encuentra lo que buscas en tu ciudad. Clasificados con categorías diversas.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -16,12 +16,16 @@
     }
 
     :root {
-      --primary: #0066FF;
-      --primary-dark: #0052CC;
-      --text-dark: #1a1a1a;
-      --text-light: #6b7280;
-      --bg-light: #f9fafb;
+      --primary: #e63946;
+      --primary-dark: #c1121f;
+      --secondary: #457b9d;
+      --accent: #f4a261;
+      --text-dark: #1a1a2e;
+      --text-light: #64748b;
+      --bg-light: #f8fafc;
       --white: #ffffff;
+      --border: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.1);
       --spacing: 8px;
     }
 
@@ -29,6 +33,7 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       line-height: 1.6;
       color: var(--text-dark);
+      background: var(--bg-light);
       overflow-x: hidden;
     }
 
@@ -38,14 +43,9 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      background: var(--white);
+      box-shadow: 0 2px 16px var(--shadow);
       transition: all 0.3s ease;
-    }
-
-    .header.scrolled {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     }
 
     .nav-container {
@@ -55,6 +55,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: calc(var(--spacing) * 3);
     }
 
     .logo {
@@ -63,425 +64,373 @@
       color: var(--primary);
       text-decoration: none;
       letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 1);
     }
 
-    .nav-menu {
+    .logo-icon {
+      font-size: 32px;
+    }
+
+    .nav-actions {
       display: flex;
-      gap: calc(var(--spacing) * 5);
-      list-style: none;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: calc(var(--spacing) * 1);
+      background: var(--bg-light);
+      padding: calc(var(--spacing) * 0.5);
+      border-radius: calc(var(--spacing) * 1);
+    }
+
+    .lang-btn {
+      width: 40px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lang-btn:hover {
+      background: var(--white);
+      transform: scale(1.05);
+    }
+
+    .lang-btn.active {
+      background: var(--white);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: calc(var(--spacing) * 2);
       align-items: center;
     }
 
-    .nav-link {
-      color: var(--text-dark);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-      font-size: 15px;
-    }
-
-    .nav-link:hover {
-      color: var(--primary);
-    }
-
-    .cta-button {
-      background: var(--primary);
-      color: var(--white);
+    .btn {
       padding: calc(var(--spacing) * 1.5) calc(var(--spacing) * 3);
       border-radius: calc(var(--spacing) * 1);
       text-decoration: none;
       font-weight: 600;
+      font-size: 14px;
       transition: all 0.3s ease;
-      border: 2px solid var(--primary);
-      font-size: 15px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
-    .cta-button:hover {
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-dark);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-light);
+      border-color: var(--text-light);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
       background: var(--primary-dark);
       border-color: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+      box-shadow: 0 4px 16px rgba(230, 57, 70, 0.3);
     }
 
-    .mobile-menu-toggle {
+    .mobile-menu-btn {
       display: none;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       background: none;
       border: none;
       cursor: pointer;
       padding: calc(var(--spacing) * 1);
     }
 
-    .mobile-menu-toggle span {
+    .mobile-menu-btn span {
       width: 24px;
       height: 2px;
       background: var(--text-dark);
       transition: all 0.3s ease;
     }
 
-    .hero {
-      position: relative;
-      height: 100vh;
-      min-height: 600px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .hero-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      transform: translate(-50%, -50%);
-      z-index: 0;
-      object-fit: cover;
-    }
-
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(0, 102, 255, 0.85), rgba(0, 82, 204, 0.75));
-      z-index: 1;
+    .hero-section {
+      margin-top: 72px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: calc(var(--spacing) * 8) calc(var(--spacing) * 3);
+      text-align: center;
     }
 
     .hero-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      color: var(--white);
       max-width: 900px;
-      padding: 0 calc(var(--spacing) * 3);
-      animation: fadeInUp 1s ease;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      margin: 0 auto;
     }
 
     .hero-title {
-      font-size: 64px;
+      font-size: 48px;
       font-weight: 700;
-      line-height: 1.2;
       margin-bottom: calc(var(--spacing) * 3);
-      letter-spacing: -1px;
+      line-height: 1.2;
     }
 
     .hero-subtitle {
-      font-size: 22px;
-      line-height: 1.5;
+      font-size: 20px;
       margin-bottom: calc(var(--spacing) * 5);
       opacity: 0.95;
-      font-weight: 400;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: calc(var(--spacing) * 2);
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .button-primary {
-      background: var(--white);
-      color: var(--primary);
-      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
-      border-radius: calc(var(--spacing) * 1);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      border: 2px solid var(--white);
-      font-size: 16px;
-    }
-
-    .button-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-    }
-
-    .button-secondary {
-      background: transparent;
-      color: var(--white);
-      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
-      border-radius: calc(var(--spacing) * 1);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      border: 2px solid var(--white);
-      font-size: 16px;
-    }
-
-    .button-secondary:hover {
-      background: var(--white);
-      color: var(--primary);
-      transform: translateY(-3px);
-    }
-
-    .section {
-      padding: calc(var(--spacing) * 12) calc(var(--spacing) * 3);
-    }
-
-    .section-light {
-      background: var(--bg-light);
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: calc(var(--spacing) * 8);
-    }
-
-    .section-title {
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: calc(var(--spacing) * 2);
-      letter-spacing: -0.5px;
-    }
-
-    .section-description {
-      font-size: 20px;
-      color: var(--text-light);
-      max-width: 700px;
-      margin: 0 auto;
       line-height: 1.5;
     }
 
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: calc(var(--spacing) * 4);
-    }
-
-    .service-card {
-      background: var(--white);
-      padding: calc(var(--spacing) * 5);
-      border-radius: calc(var(--spacing) * 2);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .service-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-    }
-
-    .service-icon {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto calc(var(--spacing) * 3);
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: calc(var(--spacing) * 2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-    }
-
-    .service-title {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: calc(var(--spacing) * 2);
-    }
-
-    .service-description {
-      color: var(--text-light);
-      line-height: 1.5;
-      font-size: 16px;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: calc(var(--spacing) * 5);
-      margin-top: calc(var(--spacing) * 6);
-    }
-
-    .benefit-item {
-      text-align: center;
-    }
-
-    .benefit-number {
-      font-size: 48px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: calc(var(--spacing) * 2);
-    }
-
-    .benefit-title {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: calc(var(--spacing) * 1);
-    }
-
-    .benefit-description {
-      color: var(--text-light);
-      line-height: 1.5;
-    }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: calc(var(--spacing) * 4);
-    }
-
-    .testimonial-card {
-      background: var(--white);
-      padding: calc(var(--spacing) * 5);
-      border-radius: calc(var(--spacing) * 2);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-    }
-
-    .testimonial-text {
-      font-size: 16px;
-      line-height: 1.5;
-      margin-bottom: calc(var(--spacing) * 3);
-      color: var(--text-dark);
-      font-style: italic;
-    }
-
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing) * 2);
-    }
-
-    .author-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--white);
-      font-weight: 600;
-      font-size: 18px;
-    }
-
-    .author-info h4 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .author-info p {
-      font-size: 14px;
-      color: var(--text-light);
-    }
-
-    .contact-section {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: var(--white);
-    }
-
-    .contact-content {
+    .search-bar {
       max-width: 800px;
       margin: 0 auto;
-    }
-
-    .contact-form {
       background: var(--white);
-      padding: calc(var(--spacing) * 6);
       border-radius: calc(var(--spacing) * 2);
-      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+      padding: calc(var(--spacing) * 1);
+      display: flex;
+      gap: calc(var(--spacing) * 2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     }
 
-    .form-group {
-      margin-bottom: calc(var(--spacing) * 3);
-    }
-
-    .form-label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: calc(var(--spacing) * 1);
-      color: var(--text-dark);
-      font-size: 15px;
-    }
-
-    .form-input,
-    .form-textarea {
-      width: 100%;
+    .search-input {
+      flex: 1;
+      border: none;
       padding: calc(var(--spacing) * 2);
-      border: 2px solid #e5e7eb;
-      border-radius: calc(var(--spacing) * 1);
+      font-size: 16px;
       font-family: inherit;
-      font-size: 15px;
-      transition: all 0.3s ease;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+      border-radius: calc(var(--spacing) * 1);
     }
 
-    .form-textarea {
-      resize: vertical;
-      min-height: 120px;
+    .search-select {
+      border: none;
+      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--bg-light);
+      border-radius: calc(var(--spacing) * 1);
+      cursor: pointer;
+      outline: none;
+      min-width: 150px;
     }
 
-    .form-button {
-      width: 100%;
+    .search-btn {
+      padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
       background: var(--primary);
       color: var(--white);
-      padding: calc(var(--spacing) * 2);
       border: none;
       border-radius: calc(var(--spacing) * 1);
       font-weight: 600;
       font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
+      white-space: nowrap;
     }
 
-    .form-button:hover {
+    .search-btn:hover {
       background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
     }
 
-    .form-button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
+    .categories-section {
+      padding: calc(var(--spacing) * 8) calc(var(--spacing) * 3);
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
-    .form-message {
-      padding: calc(var(--spacing) * 2);
-      border-radius: calc(var(--spacing) * 1);
-      margin-bottom: calc(var(--spacing) * 3);
-      font-weight: 500;
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: calc(var(--spacing) * 5);
       text-align: center;
+      color: var(--text-dark);
     }
 
-    .form-message.success {
-      background: #d1fae5;
-      color: #065f46;
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: calc(var(--spacing) * 3);
     }
 
-    .form-message.error {
-      background: #fee2e2;
-      color: #991b1b;
+    .category-card {
+      background: var(--white);
+      padding: calc(var(--spacing) * 4);
+      border-radius: calc(var(--spacing) * 2);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid var(--border);
+      text-decoration: none;
+      color: var(--text-dark);
+      display: block;
+    }
+
+    .category-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px var(--shadow);
+      border-color: var(--primary);
+    }
+
+    .category-icon {
+      font-size: 48px;
+      margin-bottom: calc(var(--spacing) * 2);
+      display: block;
+    }
+
+    .category-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 1);
+    }
+
+    .category-count {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .listings-section {
+      padding: calc(var(--spacing) * 8) calc(var(--spacing) * 3);
+      background: var(--white);
+    }
+
+    .listings-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .filters-bar {
+      background: var(--bg-light);
+      padding: calc(var(--spacing) * 3);
+      border-radius: calc(var(--spacing) * 2);
+      margin-bottom: calc(var(--spacing) * 4);
+      display: flex;
+      gap: calc(var(--spacing) * 2);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 1);
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: calc(var(--spacing) * 3);
+    }
+
+    .listing-card {
+      background: var(--white);
+      border-radius: calc(var(--spacing) * 2);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-dark);
+      display: block;
+    }
+
+    .listing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--shadow);
+      border-color: var(--primary);
+    }
+
+    .listing-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--bg-light), var(--border));
+    }
+
+    .listing-content {
+      padding: calc(var(--spacing) * 3);
+    }
+
+    .listing-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 1);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .listing-description {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: calc(var(--spacing) * 2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+
+    .listing-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: calc(var(--spacing) * 2);
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .listing-location {
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 0.5);
+    }
+
+    .listing-price {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: calc(var(--spacing) * 10) calc(var(--spacing) * 3);
+      color: var(--text-light);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: calc(var(--spacing) * 3);
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 20px;
+      margin-bottom: calc(var(--spacing) * 2);
     }
 
     .footer {
@@ -524,31 +473,6 @@
       color: var(--white);
     }
 
-    .social-links {
-      display: flex;
-      gap: calc(var(--spacing) * 2);
-      margin-top: calc(var(--spacing) * 2);
-    }
-
-    .social-link {
-      width: 40px;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--white);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-size: 18px;
-    }
-
-    .social-link:hover {
-      background: var(--primary);
-      transform: translateY(-3px);
-    }
-
     .footer-bottom {
       max-width: 1400px;
       margin: 0 auto;
@@ -559,17 +483,163 @@
       font-size: 14px;
     }
 
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: calc(var(--spacing) * 3);
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: calc(var(--spacing) * 2);
+      max-width: 500px;
+      width: 100%;
+      padding: calc(var(--spacing) * 5);
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: calc(var(--spacing) * 2);
+      right: calc(var(--spacing) * 2);
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--text-light);
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      color: var(--text-dark);
+    }
+
+    .modal-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: calc(var(--spacing) * 4);
+      color: var(--text-dark);
+    }
+
+    .form-group {
+      margin-bottom: calc(var(--spacing) * 3);
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 1);
+      color: var(--text-dark);
+      font-size: 14px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: calc(var(--spacing) * 2);
+      border: 2px solid var(--border);
+      border-radius: calc(var(--spacing) * 1);
+      font-family: inherit;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-message {
+      padding: calc(var(--spacing) * 2);
+      border-radius: calc(var(--spacing) * 1);
+      margin-bottom: calc(var(--spacing) * 3);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .form-message.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .form-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: calc(var(--spacing) * 2);
+      right: calc(var(--spacing) * 2);
+      background: var(--accent);
+      color: var(--white);
+      padding: calc(var(--spacing) * 1) calc(var(--spacing) * 2);
+      border-radius: calc(var(--spacing) * 1);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1024px) {
+      .search-bar {
+        flex-direction: column;
+      }
+
+      .search-select,
+      .search-btn {
+        width: 100%;
+      }
+    }
+
     @media (max-width: 768px) {
-      .nav-menu {
+      .auth-buttons .btn-secondary {
         display: none;
       }
 
-      .mobile-menu-toggle {
+      .mobile-menu-btn {
         display: flex;
       }
 
       .hero-title {
-        font-size: 40px;
+        font-size: 36px;
       }
 
       .hero-subtitle {
@@ -577,274 +647,219 @@
       }
 
       .section-title {
+        font-size: 28px;
+      }
+
+      .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: calc(var(--spacing) * 2);
+      }
+
+      .category-card {
+        padding: calc(var(--spacing) * 3);
+      }
+
+      .category-icon {
         font-size: 36px;
       }
 
-      .section-description {
-        font-size: 18px;
+      .category-name {
+        font-size: 16px;
       }
 
-      .hero-buttons {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .services-grid,
-      .benefits-grid,
-      .testimonials-grid {
+      .listings-grid {
         grid-template-columns: 1fr;
       }
 
-      .contact-form {
-        padding: calc(var(--spacing) * 4);
+      .filters-bar {
+        flex-direction: column;
+      }
+
+      .filter-group {
+        width: 100%;
       }
     }
 
-    .scroll-indicator {
-      position: absolute;
-      bottom: calc(var(--spacing) * 4);
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      animation: bounce 2s infinite;
+    @media (max-width: 480px) {
+      .nav-container {
+        padding: calc(var(--spacing) * 2);
+      }
+
+      .logo {
+        font-size: 24px;
+      }
+
+      .hero-section {
+        padding: calc(var(--spacing) * 6) calc(var(--spacing) * 2);
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
     }
 
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateX(-50%) translateY(0);
-      }
-      40% {
-        transform: translateX(-50%) translateY(-10px);
-      }
-      60% {
-        transform: translateX(-50%) translateY(-5px);
-      }
+    .loading {
+      text-align: center;
+      padding: calc(var(--spacing) * 8);
+      font-size: 18px;
+      color: var(--text-light);
     }
 
-    .scroll-indicator svg {
-      width: 32px;
-      height: 32px;
-      fill: var(--white);
-      opacity: 0.8;
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto calc(var(--spacing) * 3);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
 <body>
   <header class="header">
     <nav class="nav-container">
-      <a href="#" class="logo">Autobotec</a>
-      <ul class="nav-menu">
-        <li><a href="#servicios" class="nav-link">Servicios</a></li>
-        <li><a href="#beneficios" class="nav-link">Beneficios</a></li>
-        <li><a href="#testimonios" class="nav-link">Testimonios</a></li>
-        <li><a href="#contacto" class="cta-button">Contacto</a></li>
-      </ul>
-      <button class="mobile-menu-toggle" aria-label="Abrir menú">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <a href="/" class="logo">
+        <span class="logo-icon">💋</span>
+        ENCUENTRAME
+      </a>
+      <div class="nav-actions">
+        <div class="lang-switcher">
+          <button class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇪🇸</button>
+          <button class="lang-btn" data-lang="en" aria-label="English" title="English">🇺🇸</button>
+        </div>
+        <div class="auth-buttons">
+          <a href="#" class="btn btn-secondary" id="loginBtn" data-es="Iniciar sesión" data-en="Login">Iniciar sesión</a>
+          <a href="#" class="btn btn-primary" id="registerBtn" data-es="Publicar anuncio" data-en="Post Ad">Publicar anuncio</a>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </nav>
   </header>
 
-  <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
-      <source src="https://cdn.coverr.co/videos/coverr-abstract-technology-background-7045/1080p.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
+  <section class="hero-section">
     <div class="hero-content">
-      <h1 class="hero-title">Transformamos Ideas en Soluciones Tecnológicas</h1>
-      <p class="hero-subtitle">Potenciamos tu negocio con inteligencia artificial, desarrollo web, apps móviles y estrategias digitales que generan resultados reales.</p>
-      <div class="hero-buttons">
-        <a href="#contacto" class="button-primary">Solicitar Cotización</a>
-        <a href="#servicios" class="button-secondary">Conocer Servicios</a>
-      </div>
-    </div>
-    <div class="scroll-indicator">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 16l-6-6h12z"/>
-      </svg>
-    </div>
-  </section>
-
-  <section id="servicios" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Nuestros Servicios</h2>
-        <p class="section-description">Soluciones tecnológicas integrales diseñadas para impulsar tu negocio al siguiente nivel.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">🤖</div>
-          <h3 class="service-title">Agentes de IA</h3>
-          <p class="service-description">Automatizamos tareas repetitivas con inteligencia artificial avanzada, liberando tiempo valioso para enfocarte en lo estratégico.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">💻</div>
-          <h3 class="service-title">Aplicaciones Web</h3>
-          <p class="service-description">Desarrollamos aplicaciones web personalizadas, escalables y optimizadas para ofrecer la mejor experiencia de usuario.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">📱</div>
-          <h3 class="service-title">Apps Móviles</h3>
-          <p class="service-description">Creamos aplicaciones móviles nativas y multiplataforma que conectan tu negocio con tus clientes en cualquier momento.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🌐</div>
-          <h3 class="service-title">Sitios Web</h3>
-          <p class="service-description">Diseñamos y desarrollamos sitios web modernos, rápidos y optimizados para SEO que convierten visitantes en clientes.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">📈</div>
-          <h3 class="service-title">Marketing Digital</h3>
-          <p class="service-description">Estrategias completas de marketing digital y posicionamiento en redes sociales para aumentar tu visibilidad y ventas.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🎯</div>
-          <h3 class="service-title">Consultoría Tech</h3>
-          <p class="service-description">Asesoramiento estratégico para optimizar procesos, adoptar nuevas tecnologías y maximizar el retorno de inversión.</p>
-        </div>
+      <h1 class="hero-title" data-es="Encuentra lo que buscas" data-en="Find what you're looking for">Encuentra lo que buscas</h1>
+      <p class="hero-subtitle" data-es="Miles de anuncios en tu ciudad. Explora, contacta y encuentra lo que necesitas." data-en="Thousands of ads in your city. Browse, connect and find what you need.">Miles de anuncios en tu ciudad. Explora, contacta y encuentra lo que necesitas.</p>
+      <div class="search-bar">
+        <input type="text" class="search-input" id="searchInput" data-placeholder-es="¿Qué estás buscando?" data-placeholder-en="What are you looking for?" placeholder="¿Qué estás buscando?">
+        <select class="search-select" id="categoryFilter">
+          <option value="" data-es="Todas las categorías" data-en="All categories">Todas las categorías</option>
+        </select>
+        <select class="search-select" id="locationFilter">
+          <option value="" data-es="Todas las ciudades" data-en="All cities">Todas las ciudades</option>
+        </select>
+        <button class="search-btn" id="searchBtn" data-es="Buscar" data-en="Search">Buscar</button>
       </div>
     </div>
   </section>
 
-  <section id="beneficios" class="section section-light">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Por Qué Elegirnos</h2>
-        <p class="section-description">Nos diferenciamos por nuestra capacidad de entregar soluciones innovadoras con resultados medibles.</p>
-      </div>
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <div class="benefit-number">95%</div>
-          <h3 class="benefit-title">Eficiencia</h3>
-          <p class="benefit-description">Reducción promedio en tiempo de procesos manuales con nuestros agentes de IA y automatizaciones.</p>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-number">100%</div>
-          <h3 class="benefit-title">Personalización</h3>
-          <p class="benefit-description">Cada solución se diseña específicamente para tu negocio, sin plantillas genéricas ni soluciones empaquetadas.</p>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-number">24/7</div>
-          <h3 class="benefit-title">Soporte</h3>
-          <p class="benefit-description">Acompañamiento continuo y soporte técnico para garantizar el óptimo funcionamiento de tu tecnología.</p>
-        </div>
+  <section class="categories-section">
+    <h2 class="section-title" data-es="Explora por categoría" data-en="Browse by category">Explora por categoría</h2>
+    <div class="categories-grid" id="categoriesGrid">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p data-es="Cargando categorías..." data-en="Loading categories...">Cargando categorías...</p>
       </div>
     </div>
   </section>
 
-  <section id="testimonios" class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
-        <p class="section-description">Empresas que confiaron en nosotros y transformaron su manera de trabajar.</p>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <p class="testimonial-text">"Autobotec automatizó nuestro proceso de atención al cliente con un agente de IA. Ahora respondemos consultas 24/7 y nuestro equipo se enfoca en casos complejos. Increíble."</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">MC</div>
-            <div class="author-info">
-              <h4>María Contreras</h4>
-              <p>Directora de Operaciones, TechFlow</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <p class="testimonial-text">"Necesitábamos una app móvil para nuestro e-commerce. El equipo de Autobotec entregó una solución profesional, intuitiva y en tiempo récord. Nuestras ventas móviles crecieron un 150%."</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">JR</div>
-            <div class="author-info">
-              <h4>Jorge Ramírez</h4>
-              <p>CEO, Retail Plus</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <p class="testimonial-text">"La estrategia de marketing digital que diseñaron para nosotros triplicó nuestro alcance en redes sociales. Son expertos en entender lo que el mercado necesita."</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">AS</div>
-            <div class="author-info">
-              <h4>Ana Sánchez</h4>
-              <p>Marketing Manager, Innova Group</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="listings-section">
+    <div class="listings-container">
+      <h2 class="section-title" data-es="Anuncios recientes" data-en="Recent ads">Anuncios recientes</h2>
 
-  <section id="contacto" class="section contact-section">
-    <div class="container contact-content">
-      <div class="section-header">
-        <h2 class="section-title">Hablemos de Tu Proyecto</h2>
-        <p class="section-description">Cuéntanos tu idea y te ayudaremos a hacerla realidad con tecnología de vanguardia.</p>
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label class="filter-label" data-es="Ordenar por" data-en="Sort by">Ordenar por</label>
+          <select class="search-select" id="sortFilter">
+            <option value="newest" data-es="Más recientes" data-en="Newest">Más recientes</option>
+            <option value="oldest" data-es="Más antiguos" data-en="Oldest">Más antiguos</option>
+            <option value="price_low" data-es="Precio: menor a mayor" data-en="Price: low to high">Precio: menor a mayor</option>
+            <option value="price_high" data-es="Precio: mayor a menor" data-en="Price: high to low">Precio: mayor a menor</option>
+          </select>
+        </div>
       </div>
-      <form class="contact-form" id="contactForm">
-        <div id="formMessage"></div>
-        <div class="form-group">
-          <label for="name" class="form-label">Nombre Completo</label>
-          <input type="text" id="name" name="name" class="form-input" required>
+
+      <div class="listings-grid" id="listingsGrid">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p data-es="Cargando anuncios..." data-en="Loading ads...">Cargando anuncios...</p>
         </div>
-        <div class="form-group">
-          <label for="email" class="form-label">Correo Electrónico</label>
-          <input type="email" id="email" name="email" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label for="company" class="form-label">Empresa</label>
-          <input type="text" id="company" name="company" class="form-input">
-        </div>
-        <div class="form-group">
-          <label for="message" class="form-label">Cuéntanos sobre tu proyecto</label>
-          <textarea id="message" name="message" class="form-textarea" required></textarea>
-        </div>
-        <button type="submit" class="form-button">Enviar Mensaje</button>
-      </form>
+      </div>
     </div>
   </section>
 
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-section">
-        <h3>Autobotec</h3>
-        <p style="color: rgba(255, 255, 255, 0.7); line-height: 1.5; margin-top: 16px;">Transformando negocios con tecnología innovadora y soluciones personalizadas.</p>
-        <div class="social-links">
-          <a href="#" class="social-link" aria-label="Facebook">f</a>
-          <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
-          <a href="#" class="social-link" aria-label="LinkedIn">in</a>
-          <a href="#" class="social-link" aria-label="Instagram">📷</a>
-        </div>
+        <h3>ENCUENTRAME</h3>
+        <p style="color: rgba(255, 255, 255, 0.7); line-height: 1.5; margin-top: 16px;" data-es="Tu plataforma de clasificados de confianza. Encuentra lo que buscas fácilmente." data-en="Your trusted classifieds platform. Find what you're looking for easily.">Tu plataforma de clasificados de confianza. Encuentra lo que buscas fácilmente.</p>
       </div>
       <div class="footer-section">
-        <h3>Servicios</h3>
-        <ul class="footer-links">
-          <li><a href="#servicios" class="footer-link">Agentes de IA</a></li>
-          <li><a href="#servicios" class="footer-link">Desarrollo Web</a></li>
-          <li><a href="#servicios" class="footer-link">Apps Móviles</a></li>
-          <li><a href="#servicios" class="footer-link">Marketing Digital</a></li>
+        <h3 data-es="Categorías" data-en="Categories">Categorías</h3>
+        <ul class="footer-links" id="footerCategories">
+          <li><a href="#" class="footer-link">Escorts</a></li>
+          <li><a href="#" class="footer-link" data-es="Masajes" data-en="Massages">Masajes</a></li>
+          <li><a href="#" class="footer-link">Trans</a></li>
         </ul>
       </div>
       <div class="footer-section">
-        <h3>Empresa</h3>
+        <h3 data-es="Información" data-en="Information">Información</h3>
         <ul class="footer-links">
-          <li><a href="#beneficios" class="footer-link">Sobre Nosotros</a></li>
-          <li><a href="#testimonios" class="footer-link">Testimonios</a></li>
-          <li><a href="#contacto" class="footer-link">Contacto</a></li>
+          <li><a href="#" class="footer-link" data-es="Sobre nosotros" data-en="About us">Sobre nosotros</a></li>
+          <li><a href="#" class="footer-link" data-es="Términos de servicio" data-en="Terms of service">Términos de servicio</a></li>
+          <li><a href="#" class="footer-link" data-es="Política de privacidad" data-en="Privacy policy">Política de privacidad</a></li>
         </ul>
       </div>
       <div class="footer-section">
-        <h3>Contacto</h3>
+        <h3 data-es="Contacto" data-en="Contact">Contacto</h3>
         <ul class="footer-links">
-          <li><a href="mailto:info@autobotec.net" class="footer-link">info@autobotec.net</a></li>
-          <li><a href="https://autobotec.net" class="footer-link" target="_blank">autobotec.net</a></li>
+          <li><a href="mailto:info@encuentrame.com" class="footer-link">info@encuentrame.com</a></li>
+          <li><a href="#" class="footer-link" data-es="Centro de ayuda" data-en="Help center">Centro de ayuda</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 Autobotec. Todos los derechos reservados. | <a href="#" class="footer-link">Aviso Legal</a> | <a href="#" class="footer-link">Política de Privacidad</a></p>
+      <p>&copy; 2025 ENCUENTRAME. <span data-es="Todos los derechos reservados." data-en="All rights reserved.">Todos los derechos reservados.</span></p>
     </div>
   </footer>
+
+  <div class="modal" id="authModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <h2 class="modal-title" id="modalTitle">Iniciar sesión</h2>
+      <form id="authForm">
+        <div id="authMessage"></div>
+        <div class="form-group" id="usernameGroup" style="display: none;">
+          <label for="username" class="form-label" data-es="Nombre de usuario" data-en="Username">Nombre de usuario</label>
+          <input type="text" id="username" class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="authEmail" class="form-label" data-es="Correo electrónico" data-en="Email">Correo electrónico</label>
+          <input type="email" id="authEmail" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="authPassword" class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label>
+          <input type="password" id="authPassword" class="form-input" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;" id="authSubmitBtn">Iniciar sesión</button>
+      </form>
+    </div>
+  </div>
 
   <script type="module" src="/src/main.js"></script>
 </body>
