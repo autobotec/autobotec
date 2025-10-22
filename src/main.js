@@ -198,7 +198,7 @@ class App {
         </div>
       `;
 
-      this.loadHomeData();
+      setTimeout(() => this.loadHomeData(), 100);
     }
   }
 
@@ -206,61 +206,80 @@ class App {
     const lang = i18n.getCurrentLanguage();
     const t = i18n.t.bind(i18n);
 
-    const [categoriesRes, listingsRes] = await Promise.all([
-      supabase.from('categories').select('*').order('order_index'),
-      supabase.from('listings')
-        .select(`
-          *,
-          category:categories(name_en, name_es),
-          location:locations(name_en, name_es)
-        `)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
-        .limit(8)
-    ]);
+    try {
+      const [categoriesRes, listingsRes] = await Promise.all([
+        supabase.from('categories').select('*').order('order_index'),
+        supabase.from('listings')
+          .select(`
+            *,
+            category:categories(name_en, name_es),
+            location:locations(name_en, name_es)
+          `)
+          .eq('status', 'active')
+          .order('created_at', { ascending: false })
+          .limit(8)
+      ]);
 
-    const categories = categoriesRes.data || [];
-    const listings = listingsRes.data || [];
+      if (categoriesRes.error) {
+        console.error('Error loading categories:', categoriesRes.error);
+      }
+      if (listingsRes.error) {
+        console.error('Error loading listings:', listingsRes.error);
+      }
 
-    const categoriesGrid = document.getElementById('categories-grid');
-    if (categoriesGrid) {
-      categoriesGrid.innerHTML = categories.map(cat => `
-        <div class="category-card">
-          <div class="category-icon">${cat.icon || '📁'}</div>
-          <div class="category-name">${lang === 'en' ? cat.name_en : cat.name_es}</div>
-        </div>
-      `).join('');
-    }
+      const categories = categoriesRes.data || [];
+      const listings = listingsRes.data || [];
 
-    const featuredGrid = document.getElementById('featured-listings');
-    if (featuredGrid) {
-      if (listings.length === 0) {
-        featuredGrid.innerHTML = `<p>${t('common.noResults')}</p>`;
-      } else {
-        featuredGrid.innerHTML = listings.map(listing => {
-          const title = lang === 'en' ? listing.title_en : listing.title_es;
-          const locationName = listing.location ?
-            (lang === 'en' ? listing.location.name_en : listing.location.name_es) :
-            '';
+      const categoriesGrid = document.getElementById('categories-grid');
+      if (categoriesGrid) {
+        if (categories.length === 0) {
+          categoriesGrid.innerHTML = '<p style="text-align: center; padding: calc(var(--spacing) * 4);">No categories available</p>';
+        } else {
+          categoriesGrid.innerHTML = categories.map(cat => `
+            <div class="category-card">
+              <div class="category-icon">${cat.icon || '📁'}</div>
+              <div class="category-name">${lang === 'en' ? cat.name_en : cat.name_es}</div>
+            </div>
+          `).join('');
+        }
+      }
 
-          return `
-            <div class="listing-card">
-              ${listing.featured ? `<span class="badge badge-featured">${t('listing.featured')}</span>` : ''}
-              <img
-                src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=400"
-                alt="${title}"
-                class="listing-image"
-              />
-              <div class="listing-content">
-                <h3 class="listing-title">${title}</h3>
-                <div class="listing-meta">
-                  <span class="listing-location">📍 ${locationName}</span>
-                  ${listing.price ? `<span class="listing-price">$${listing.price}</span>` : ''}
+      const featuredGrid = document.getElementById('featured-listings');
+      if (featuredGrid) {
+        if (listings.length === 0) {
+          featuredGrid.innerHTML = `<p style="text-align: center; padding: calc(var(--spacing) * 4);">${t('common.noResults')}</p>`;
+        } else {
+          featuredGrid.innerHTML = listings.map(listing => {
+            const title = lang === 'en' ? listing.title_en : listing.title_es;
+            const locationName = listing.location ?
+              (lang === 'en' ? listing.location.name_en : listing.location.name_es) :
+              '';
+
+            return `
+              <div class="listing-card">
+                ${listing.featured ? `<span class="badge badge-featured">${t('listing.featured')}</span>` : ''}
+                <img
+                  src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  alt="${title}"
+                  class="listing-image"
+                />
+                <div class="listing-content">
+                  <h3 class="listing-title">${title}</h3>
+                  <div class="listing-meta">
+                    <span class="listing-location">📍 ${locationName}</span>
+                    ${listing.price ? `<span class="listing-price">$${listing.price}</span>` : ''}
+                  </div>
                 </div>
               </div>
-            </div>
-          `;
-        }).join('');
+            `;
+          }).join('');
+        }
+      }
+    } catch (error) {
+      console.error('Error in loadHomeData:', error);
+      const categoriesGrid = document.getElementById('categories-grid');
+      if (categoriesGrid) {
+        categoriesGrid.innerHTML = '<p style="color: red;">Error loading data. Please check console.</p>';
       }
     }
   }
