@@ -108,6 +108,22 @@ const translations = {
     'auth.have_account': '¿Ya tienes cuenta?',
     'auth.terms': 'Acepto los términos y condiciones',
     'auth.age_confirm': 'Confirmo que soy mayor de 18 años',
+    'login': 'Iniciar sesión',
+    'register': 'Registrarse',
+    'email': 'Correo electrónico',
+    'password': 'Contraseña',
+    'username': 'Nombre de usuario',
+    'emailPlaceholder': 'tu@email.com',
+    'passwordPlaceholder': 'Tu contraseña',
+    'usernamePlaceholder': 'Nombre de usuario (mínimo 3 caracteres)',
+    'loginSubtitle': 'Ingresa a tu cuenta para administrar tus anuncios',
+    'registerSubtitle': 'Crea una cuenta para comenzar a publicar',
+    'needAccount': '¿No tienes cuenta? Regístrate',
+    'haveAccount': '¿Ya tienes cuenta? Inicia sesión',
+    'loading': 'Cargando...',
+    'authError': 'Error en la autenticación',
+    'usernameRequired': 'El nombre de usuario es requerido (mínimo 3 caracteres)',
+    'accountCreated': 'Cuenta creada exitosamente. Bienvenido!',
 
     'footer.about': 'Sobre nosotros',
     'footer.terms': 'Términos de servicio',
@@ -243,6 +259,22 @@ const translations = {
     'auth.have_account': 'Already have an account?',
     'auth.terms': 'I accept the terms and conditions',
     'auth.age_confirm': 'I confirm I am 18 or older',
+    'login': 'Login',
+    'register': 'Register',
+    'email': 'Email',
+    'password': 'Password',
+    'username': 'Username',
+    'emailPlaceholder': 'your@email.com',
+    'passwordPlaceholder': 'Your password',
+    'usernamePlaceholder': 'Username (minimum 3 characters)',
+    'loginSubtitle': 'Sign in to your account to manage your ads',
+    'registerSubtitle': 'Create an account to start posting',
+    'needAccount': 'Don\'t have an account? Register',
+    'haveAccount': 'Already have an account? Login',
+    'loading': 'Loading...',
+    'authError': 'Authentication error',
+    'usernameRequired': 'Username is required (minimum 3 characters)',
+    'accountCreated': 'Account created successfully. Welcome!',
 
     'footer.about': 'About us',
     'footer.terms': 'Terms of service',
@@ -305,3 +337,11 @@ export function updatePageTranslations() {
 export function initI18n() {
   setLanguage(currentLang);
 }
+
+export const i18n = {
+  t,
+  setLanguage,
+  getLanguage,
+  updatePageTranslations,
+  initI18n
+};

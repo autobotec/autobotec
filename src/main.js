@@ -7,6 +7,10 @@ import { CityPage } from './pages/CityPage.js';
 import { CategoryCountryPage } from './pages/CategoryCountryPage.js';
 import { CategoryStatePage } from './pages/CategoryStatePage.js';
 import { CategoryCityPage } from './pages/CategoryCityPage.js';
+import { AuthPage } from './pages/AuthPage.js';
+import { DashboardPage } from './pages/DashboardPage.js';
+import { PostAdPage } from './pages/PostAdPage.js';
+import { EditAdPage } from './pages/EditAdPage.js';
 import { Header, initHeaderEvents } from './components/Header.js';
 import { Footer } from './components/Footer.js';
 import './styles/app.css';
@@ -18,6 +22,27 @@ initI18n();
 async function handleRoute() {
   const path = window.location.pathname;
   const segments = path.split('/').filter(s => s);
+
+  if (path === '/auth') {
+    await renderNoLayout(AuthPage);
+    return;
+  }
+
+  if (path === '/dashboard') {
+    await renderNoLayout(DashboardPage);
+    return;
+  }
+
+  if (path === '/post-ad') {
+    await renderNoLayout(PostAdPage);
+    return;
+  }
+
+  if (path.startsWith('/edit-ad/')) {
+    const listingId = segments[1];
+    await renderNoLayout(() => EditAdPage(listingId));
+    return;
+  }
 
   const route = await resolveRoute(segments);
 
@@ -77,6 +102,14 @@ async function render(pageFunction) {
   `;
 
   initHeaderEvents();
+}
+
+async function renderNoLayout(pageFunction) {
+  const app = document.getElementById('app');
+  if (!app) return;
+
+  app.innerHTML = '';
+  await pageFunction();
 }
 
 handleRoute();
