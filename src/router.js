@@ -7,9 +7,13 @@ export class Router {
     window.addEventListener('popstate', () => this.handleRoute());
 
     document.addEventListener('click', (e) => {
-      if (e.target.matches('[data-link]')) {
+      const link = e.target.closest('[data-link]');
+      if (link) {
         e.preventDefault();
-        this.navigate(e.target.getAttribute('href'));
+        const href = link.getAttribute('href');
+        if (href) {
+          this.navigate(href);
+        }
       }
     });
   }

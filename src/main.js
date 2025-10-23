@@ -11,6 +11,7 @@ import { AuthPage } from './pages/AuthPage.js';
 import { DashboardPage } from './pages/DashboardPage.js';
 import { PostAdPage } from './pages/PostAdPage.js';
 import { EditAdPage } from './pages/EditAdPage.js';
+import { ListingSinglePage } from './pages/ListingSinglePage.js';
 import { Header, initHeaderEvents } from './components/Header.js';
 import { Footer } from './components/Footer.js';
 import './styles/app.css';
@@ -41,6 +42,12 @@ async function handleRoute() {
   if (path.startsWith('/edit-ad/')) {
     const listingId = segments[1];
     await renderNoLayout(() => EditAdPage(listingId));
+    return;
+  }
+
+  if (path.startsWith('/listing/')) {
+    const listingId = segments[1];
+    await renderNoLayout(() => ListingSinglePage(listingId));
     return;
   }
 
