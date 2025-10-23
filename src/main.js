@@ -1,5 +1,5 @@
 import { initI18n } from './lib/i18n.js';
-import { router } from './router.js';
+import { resolveRoute } from './lib/routeResolver.js';
 import { HomePage } from './pages/HomePage.js';
 import { CountryPage } from './pages/CountryPage.js';
 import { StatePage } from './pages/StatePage.js';
@@ -15,38 +15,51 @@ console.log('🚀 ENCUENTRAME / FIND ME - Starting with routing...');
 
 initI18n();
 
-router.addRoute('/', async () => {
-  await render(HomePage);
-});
+async function handleRoute() {
+  const path = window.location.pathname;
+  const segments = path.split('/').filter(s => s);
 
-// Category + Geography routes (most specific first)
-router.addRoute('/:countryCode/:categorySlug/:stateSlug/:citySlug', async (params) => {
-  await render(() => CategoryCityPage(params));
-});
+  const route = await resolveRoute(segments);
 
-router.addRoute('/:countryCode/:categorySlug/:stateSlug', async (params) => {
-  await render(() => CategoryStatePage(params));
-});
+  switch (route.type) {
+    case 'home':
+      await render(HomePage);
+      break;
+    case 'country':
+      await render(() => CountryPage({ countryCode: route.countryCode }));
+      break;
+    case 'state':
+      await render(() => StatePage({ countryCode: route.countryCode, stateSlug: route.stateSlug }));
+      break;
+    case 'city':
+      await render(() => CityPage({ countryCode: route.countryCode, stateSlug: route.stateSlug, citySlug: route.citySlug }));
+      break;
+    case 'category-country':
+      await render(() => CategoryCountryPage({ countryCode: route.countryCode, categorySlug: route.categorySlug }));
+      break;
+    case 'category-state':
+      await render(() => CategoryStatePage({ countryCode: route.countryCode, categorySlug: route.categorySlug, stateSlug: route.stateSlug }));
+      break;
+    case 'category-city':
+      await render(() => CategoryCityPage({ countryCode: route.countryCode, categorySlug: route.categorySlug, stateSlug: route.stateSlug, citySlug: route.citySlug }));
+      break;
+    default:
+      await render(() => '<div class="error-page"><div class="container"><h1>404 - Page Not Found</h1><p>The page you are looking for does not exist.</p><a href="/" data-link class="btn-primary">Go Home</a></div></div>');
+  }
+}
 
-router.addRoute('/:countryCode/:categorySlug', async (params) => {
-  await render(() => CategoryCountryPage(params));
-});
+window.addEventListener('popstate', handleRoute);
 
-// Geography only routes
-router.addRoute('/:countryCode/:stateSlug/:citySlug', async (params) => {
-  await render(() => CityPage(params));
-});
-
-router.addRoute('/:countryCode/:stateSlug', async (params) => {
-  await render(() => StatePage(params));
-});
-
-router.addRoute('/:countryCode', async (params) => {
-  await render(() => CountryPage(params));
-});
-
-router.addRoute('*', async () => {
-  await render(HomePage);
+document.addEventListener('click', (e) => {
+  if (e.target.matches('[data-link]') || e.target.closest('[data-link]')) {
+    e.preventDefault();
+    const link = e.target.matches('[data-link]') ? e.target : e.target.closest('[data-link]');
+    const href = link.getAttribute('href');
+    if (href && href !== window.location.pathname) {
+      window.history.pushState(null, null, href);
+      handleRoute();
+    }
+  }
 });
 
 async function render(pageFunction) {
@@ -66,4 +79,4 @@ async function render(pageFunction) {
   initHeaderEvents();
 }
 
-router.start();
+handleRoute();
