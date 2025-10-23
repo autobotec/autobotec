@@ -511,6 +511,142 @@ body {
   padding: 1rem 0;
 }
 
+.breadcrumb {
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 0;
+}
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-light);
+  flex-wrap: wrap;
+}
+
+.breadcrumb-nav a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-nav a:hover {
+  color: var(--primary-dark);
+}
+
+.breadcrumb-nav .current {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.location-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  padding: 2rem 0;
+}
+
+.location-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.location-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.category-header {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+  color: white;
+  padding: 2rem 0;
+}
+
+.category-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.category-icon-large {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.category-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.category-location {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.cities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.location-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-medium);
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.location-link:hover {
+  background: var(--bg-light);
+  color: var(--primary);
+}
+
+.location-count {
+  color: var(--text-light);
+  font-size: 0.875rem;
+}
+
+.navigation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-medium);
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.nav-link:hover {
+  background: var(--bg-light);
+  color: var(--primary);
+}
+
+.category-link.active {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
 .app-footer {
   background: var(--text-dark);
   color: white;
