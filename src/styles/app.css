@@ -489,9 +489,28 @@ body {
 
 .listing-card-actions .btn-secondary,
 .listing-card-actions .btn-danger,
-.listing-card-actions .btn-toggle-status {
+.listing-card-actions .btn-toggle-status,
+.listing-card-actions .btn-view {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
+}
+
+.btn-view {
+  padding: 0.5rem 1rem;
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.btn-view:hover {
+  background: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
 .post-ad-page {

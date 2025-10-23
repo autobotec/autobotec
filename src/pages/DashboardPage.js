@@ -158,10 +158,13 @@ export async function DashboardPage() {
                       </div>
 
                       <div class="listing-card-actions">
+                        ${listing.status === 'active' ? `
+                          <button class="btn-view" data-id="${listing.id}">👁️ Ver anuncio</button>
+                        ` : ''}
                         <button class="btn-secondary btn-toggle-status" data-id="${listing.id}" data-status="${listing.status}">
                           ${listing.status === 'active' ? 'Desactivar' : 'Activar'}
                         </button>
-                        <a href="/edit-ad/${listing.id}" class="btn-secondary">${t('common.edit')}</a>
+                        <a href="/edit-ad/${listing.id}" data-link class="btn-secondary">${t('common.edit')}</a>
                         <button class="btn-danger btn-delete" data-id="${listing.id}">${t('common.delete')}</button>
                       </div>
                     </div>
@@ -186,6 +189,50 @@ export async function DashboardPage() {
         const listingId = e.target.getAttribute('data-id');
         const currentStatus = e.target.getAttribute('data-status');
         handleToggleStatus(listingId, currentStatus);
+      });
+    });
+
+    document.querySelectorAll('.btn-view').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const listingId = e.target.getAttribute('data-id');
+        const listing = listings.find(l => l.id === listingId);
+        if (!listing) return;
+
+        try {
+          const { data: country } = await supabase
+            .from('countries')
+            .select('code')
+            .eq('id', listing.country_id)
+            .maybeSingle();
+
+          const { data: state } = await supabase
+            .from('states')
+            .select('slug')
+            .eq('id', listing.state_id)
+            .maybeSingle();
+
+          const { data: city } = await supabase
+            .from('cities')
+            .select('slug')
+            .eq('id', listing.city_id)
+            .maybeSingle();
+
+          const { data: category } = await supabase
+            .from('categories')
+            .select('slug')
+            .eq('id', listing.category_id)
+            .maybeSingle();
+
+          if (country && state && city && category) {
+            const url = `/${country.code.toLowerCase()}/${category.slug}/${state.slug}/${city.slug}`;
+            window.location.href = url;
+          } else {
+            alert('No se pudo construir la URL del anuncio');
+          }
+        } catch (error) {
+          console.error('Error getting listing URL:', error);
+          alert('Error al cargar el anuncio');
+        }
       });
     });
   }

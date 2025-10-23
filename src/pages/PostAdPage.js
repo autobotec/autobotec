@@ -145,8 +145,47 @@ export async function PostAdPage() {
 
       if (error) throw error;
 
-      alert(t('post_ad.success'));
-      window.location.href = '/dashboard';
+      const result = confirm(t('post_ad.success') + '\n\n¿Deseas ver tu anuncio publicado ahora?');
+
+      if (result) {
+        try {
+          const { data: country } = await supabase
+            .from('countries')
+            .select('code')
+            .eq('id', data.country_id)
+            .maybeSingle();
+
+          const { data: state } = await supabase
+            .from('states')
+            .select('slug')
+            .eq('id', data.state_id)
+            .maybeSingle();
+
+          const { data: city } = await supabase
+            .from('cities')
+            .select('slug')
+            .eq('id', data.city_id)
+            .maybeSingle();
+
+          const { data: category } = await supabase
+            .from('categories')
+            .select('slug')
+            .eq('id', data.category_id)
+            .maybeSingle();
+
+          if (country && state && city && category) {
+            const url = `/${country.code.toLowerCase()}/${category.slug}/${state.slug}/${city.slug}`;
+            window.location.href = url;
+          } else {
+            window.location.href = '/dashboard';
+          }
+        } catch (err) {
+          console.error('Error building URL:', err);
+          window.location.href = '/dashboard';
+        }
+      } else {
+        window.location.href = '/dashboard';
+      }
     } catch (error) {
       console.error('Error creating listing:', error);
       errorDiv.textContent = error.message || t('post_ad.error');
